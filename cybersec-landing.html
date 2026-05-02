@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberAcademy — Kiber xavfsizlikka kirish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050a0f;
+    --bg2: #080f17;
+    --bg3: #0d1520;
+    --surface: rgba(13,21,32,0.8);
+    --border: rgba(0,255,136,0.15);
+    --border2: rgba(0,200,255,0.12);
+    --text: #e8f4ff;
+    --text2: #8ba8c4;
+    --text3: #4a6a88;
+    --green: #00ff88;
+    --cyan: #00c8ff;
+    --purple: #a855f7;
+    --green-glow: 0 0 20px rgba(0,255,136,0.3);
+    --cyan-glow: 0 0 20px rgba(0,200,255,0.3);
+    --purple-glow: 0 0 20px rgba(168,85,247,0.3);
+    --font: 'Outfit', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  [data-theme="light"] {
+    --bg: #f0f4f8;
+    --bg2: #e8eef5;
+    --bg3: #dde5ef;
+    --surface: rgba(255,255,255,0.85);
+    --border: rgba(0,180,100,0.25);
+    --border2: rgba(0,150,200,0.2);
+    --text: #0d1520;
+    --text2: #3a5a78;
+    --text3: #7a9ab8;
+    --green: #008844;
+    --cyan: #0088bb;
+    --purple: #7722cc;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;font-size:16px}
+  body{font-family:var(--font);background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+  ::selection{background:rgba(0,255,136,0.2);color:var(--green)}
+  img{max-width:100%}
+  a{color:inherit;text-decoration:none}
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar{width:4px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--green);border-radius:2px}
+
+  /* GRID BG */
+  .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,136,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+  .noise{position:absolute;inset:0;opacity:0.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none}
+
+  /* NAVBAR */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 max(24px,5vw);height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(5,10,15,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:all .3s}
+  [data-theme="light"] nav{background:rgba(240,244,248,0.9)}
+  .nav-logo{font-family:var(--mono);font-size:1.1rem;color:var(--green);letter-spacing:.05em;display:flex;align-items:center;gap:8px}
+  .nav-logo span{color:var(--text2);font-size:.75rem}
+  .nav-links{display:flex;align-items:center;gap:8px}
+  .nav-links a{font-size:.85rem;color:var(--text2);padding:6px 12px;border-radius:6px;transition:all .2s;white-space:nowrap}
+  .nav-links a:hover{color:var(--green);background:rgba(0,255,136,0.06)}
+  .nav-right{display:flex;align-items:center;gap:8px}
+  .lang-btn{font-size:.8rem;padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all .2s;font-family:var(--font)}
+  .lang-btn.active{border-color:var(--green);color:var(--green);background:rgba(0,255,136,0.08)}
+  .theme-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .2s}
+  .theme-btn:hover{border-color:var(--green);color:var(--green)}
+  .cta-nav{padding:8px 18px;background:var(--green);color:#050a0f !important;border-radius:8px;font-weight:600;font-size:.85rem;transition:all .2s;border:none;cursor:pointer;font-family:var(--font)}
+  .cta-nav:hover{box-shadow:var(--green-glow);transform:translateY(-1px)}
+  .mobile-menu-btn{display:none;background:transparent;border:1px solid var(--border);color:var(--text2);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:1.1rem}
+
+  /* SECTIONS */
+  section{position:relative;overflow:hidden}
+  .container{max-width:1200px;margin:0 auto;padding:0 max(24px,5vw)}
+
+  /* HERO */
+  #hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:64px}
+  .hero-inner{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:80px 24px}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid var(--border);border-radius:100px;font-size:.8rem;color:var(--green);margin-bottom:32px;background:rgba(0,255,136,0.05);font-family:var(--mono)}
+  .hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:var(--green-glow);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+  h1.hero-title{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;margin-bottom:24px}
+  .hero-title .line2{background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero-sub{font-size:clamp(1rem,2.5vw,1.25rem);color:var(--text2);max-width:600px;margin:0 auto 48px;font-weight:300;line-height:1.7}
+  .hero-cta-group{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:64px}
+  .btn-primary{padding:16px 36px;background:var(--green);color:#050a0f;border-radius:10px;font-weight:700;font-size:1rem;border:none;cursor:pointer;transition:all .3s;font-family:var(--font);display:inline-flex;align-items:center;gap:8px}
+  .btn-primary:hover{box-shadow:0 0 40px rgba(0,255,136,0.4);transform:translateY(-2px)}
+  .btn-secondary{padding:16px 36px;background:transparent;color:var(--text);border-radius:10px;font-weight:600;font-size:1rem;border:1px solid var(--border2);cursor:pointer;transition:all .3s;font-family:var(--font)}
+  .btn-secondary:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:var(--cyan-glow)}
+  .hero-stats{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;padding-top:48px;border-top:1px solid var(--border)}
+  .hero-stat{text-align:center}
+  .hero-stat-num{font-size:2rem;font-weight:800;color:var(--green);font-family:var(--mono)}
+  .hero-stat-label{font-size:.8rem;color:var(--text3);margin-top:4px}
+
+  /* FLOATING ORBS */
+  .orb{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}
+  .orb1{width:400px;height:400px;background:rgba(0,255,136,0.08);top:-100px;right:-100px;animation:float 8s ease-in-out infinite}
+  .orb2{width:300px;height:300px;background:rgba(0,200,255,0.06);bottom:-50px;left:-100px;animation:float 10s ease-in-out infinite reverse}
+  .orb3{width:200px;height:200px;background:rgba(168,85,247,0.08);top:50%;left:50%;animation:float 12s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
+
+  /* INSTRUCTOR */
+  #instructor{padding:100px 0;background:var(--bg2)}
+  .section-label{font-family:var(--mono);font-size:.75rem;color:var(--green);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px}
+  .section-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.2;margin-bottom:16px}
+  .section-subtitle{font-size:1rem;color:var(--text2);max-width:500px;line-height:1.7}
+  .instructor-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-top:64px}
+  .instructor-avatar{position:relative}
+  .avatar-frame{width:300px;height:300px;border-radius:24px;background:linear-gradient(135deg,rgba(0,255,136,0.1),rgba(0,200,255,0.05));border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden}
+  .avatar-frame::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,255,136,0.1));pointer-events:none}
+  .avatar-glow{position:absolute;inset:-1px;border-radius:24px;background:linear-gradient(135deg,var(--green),var(--cyan),var(--purple));opacity:0;transition:opacity .3s;z-index:-1}
+  .avatar-frame:hover .avatar-glow{opacity:.3}
+  .instructor-roles{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+  .role-tag{padding:5px 14px;border-radius:100px;border:1px solid var(--border);font-size:.8rem;color:var(--text2);font-family:var(--mono);background:rgba(0,255,136,0.04);transition:all .2s}
+  .role-tag:hover{border-color:var(--green);color:var(--green)}
+  .instructor-name{font-size:2rem;font-weight:800;margin-bottom:8px}
+  .instructor-bio{color:var(--text2);line-height:1.7;font-size:.95rem;margin-bottom:24px}
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
+  .stat-card{padding:20px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;text-align:center;transition:all .3s}
+  .stat-card:hover{border-color:var(--green);box-shadow:var(--green-glow)}
+  .stat-num{font-size:1.8rem;font-weight:800;color:var(--green);font-family:var(--mono)}
+  .stat-label{font-size:.75rem;color:var(--text3);margin-top:4px}
+
+  /* ATTACK TIMELINE */
+  #attack{padding:100px 0}
+  .timeline{margin-top:64px;position:relative;padding-left:48px}
+  .timeline::before{content:'';position:absolute;left:16px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--green),var(--cyan),var(--purple),transparent)}
+  .timeline-item{position:relative;margin-bottom:48px;opacity:0;transform:translateX(-20px);transition:all .5s}
+  .timeline-item.visible{opacity:1;transform:translateX(0)}
+  .timeline-dot{position:absolute;left:-40px;top:16px;width:16px;height:16px;border-radius:50%;background:var(--bg);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;box-shadow:var(--green-glow)}
+  .timeline-dot::after{content:'';width:6px;height:6px;border-radius:50%;background:var(--green)}
+  .timeline-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all .3s}
+  .timeline-card:hover{border-color:var(--green);box-shadow:var(--green-glow);transform:translateX(8px)}
+  .timeline-step{font-family:var(--mono);font-size:.7rem;color:var(--green);margin-bottom:8px;letter-spacing:.1em}
+  .timeline-title{font-size:1.1rem;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+  .timeline-icon{font-size:1.3rem}
+  .timeline-desc{font-size:.9rem;color:var(--text2);line-height:1.6}
+
+  /* LEARN */
+  #learn{padding:100px 0;background:var(--bg2)}
+  .learn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:48px}
+  .learn-card{padding:24px;background:var(--bg3);border:1px solid var(--border);border-radius:16px;transition:all .3s;cursor:default;position:relative;overflow:hidden}
+  .learn-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0,rgba(0,255,136,0.08),transparent 70%);opacity:0;transition:opacity .3s}
+  .learn-card:hover::before{opacity:1}
+  .learn-card:hover{border-color:var(--green);transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,255,136,0.1)}
+  .learn-icon{font-size:1.8rem;margin-bottom:12px}
+  .learn-name{font-weight:700;font-size:1rem;margin-bottom:6px}
+  .learn-desc{font-size:.8rem;color:var(--text3);line-height:1.5}
+
+  /* REQUIREMENTS */
+  #requirements{padding:100px 0}
+  .req-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:48px}
+  .req-item{display:flex;align-items:flex-start;gap:16px;padding:20px 24px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;transition:all .3s}
+  .req-item:hover{border-color:var(--cyan);box-shadow:var(--cyan-glow)}
+  .req-check{width:24px;height:24px;border-radius:6px;background:rgba(0,255,136,0.1);border:1px solid var(--green);display:flex;align-items:center;justify-content:center;color:var(--green);font-size:.9rem;flex-shrink:0;margin-top:2px}
+  .req-text{font-size:.95rem;color:var(--text2);line-height:1.5}
+  .req-title{font-weight:600;color:var(--text);margin-bottom:4px}
+
+  /* CAREERS */
+  #careers{padding:100px 0;background:var(--bg2)}
+  .career-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:24px;margin-top:48px}
+  .career-card{padding:32px 24px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;transition:all .4s;position:relative;overflow:hidden}
+  .career-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--cyan));transform:scaleX(0);transform-origin:left;transition:transform .4s}
+  .career-card:hover::after{transform:scaleX(1)}
+  .career-card:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,0.3)}
+  .career-icon{font-size:2.5rem;margin-bottom:16px}
+  .career-title{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+  .career-desc{font-size:.85rem;color:var(--text3);line-height:1.6}
+  .career-salary{margin-top:16px;font-family:var(--mono);font-size:.8rem;color:var(--green);padding:4px 10px;background:rgba(0,255,136,0.08);border-radius:6px;display:inline-block}
+
+  /* PRICING */
+  #pricing{padding:100px 0}
+  .pricing-wrapper{max-width:560px;margin:48px auto 0}
+  .pricing-card{background:var(--bg2);border:1px solid var(--green);border-radius:24px;padding:48px;position:relative;overflow:hidden}
+  .pricing-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at center,rgba(0,255,136,0.04),transparent 60%);pointer-events:none}
+  .pricing-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;background:rgba(0,255,136,0.1);border:1px solid var(--green);border-radius:100px;font-size:.8rem;color:var(--green);font-family:var(--mono);margin-bottom:24px}
+  .pricing-price{font-size:clamp(2.5rem,6vw,3.5rem);font-weight:900;color:var(--text);letter-spacing:-.03em;margin-bottom:4px}
+  .pricing-price span{font-size:1rem;font-weight:400;color:var(--text3)}
+  .pricing-installment{display:flex;align-items:center;gap:12px;padding:16px 20px;background:rgba(0,200,255,0.06);border:1px solid rgba(0,200,255,0.15);border-radius:12px;margin:24px 0;font-size:.9rem;color:var(--text2)}
+  .pricing-installment strong{color:var(--cyan)}
+  .pricing-features{list-style:none;margin:24px 0 32px;display:flex;flex-direction:column;gap:12px}
+  .pricing-features li{display:flex;align-items:center;gap:10px;font-size:.9rem;color:var(--text2)}
+  .pricing-features li::before{content:'✓';color:var(--green);font-weight:700;font-size:.9rem;flex-shrink:0}
+  .btn-cta-large{width:100%;padding:18px;background:var(--green);color:#050a0f;border-radius:12px;font-weight:800;font-size:1.1rem;border:none;cursor:pointer;transition:all .3s;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px}
+  .btn-cta-large:hover{box-shadow:0 0 60px rgba(0,255,136,0.4);transform:translateY(-2px)}
+
+  /* CONTACT */
+  #contact{padding:100px 0 60px;background:var(--bg2)}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:48px;align-items:start}
+  .contact-info{display:flex;flex-direction:column;gap:16px}
+  .contact-item{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;transition:all .3s;cursor:pointer}
+  .contact-item:hover{border-color:var(--green);box-shadow:var(--green-glow);transform:translateX(4px)}
+  .contact-icon{font-size:1.3rem;width:40px;text-align:center}
+  .contact-label{font-size:.75rem;color:var(--text3);margin-bottom:2px}
+  .contact-value{font-weight:600;font-size:.95rem}
+  .contact-form{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:32px}
+  .form-group{margin-bottom:20px}
+  .form-label{font-size:.8rem;color:var(--text2);margin-bottom:8px;display:block;font-weight:500}
+  .form-input{width:100%;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font);font-size:.9rem;outline:none;transition:all .2s}
+  .form-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,255,136,0.08)}
+  .form-input::placeholder{color:var(--text3)}
+
+  /* FOOTER */
+  footer{padding:40px 0;border-top:1px solid var(--border);text-align:center}
+  .footer-logo{font-family:var(--mono);font-size:1.2rem;color:var(--green);margin-bottom:8px}
+  .footer-text{font-size:.8rem;color:var(--text3)}
+
+  /* SCROLL ANIMATIONS */
+  .fade-up{opacity:0;transform:translateY(32px);transition:opacity .6s,transform .6s}
+  .fade-up.visible{opacity:1;transform:translateY(0)}
+  .fade-left{opacity:0;transform:translateX(-32px);transition:opacity .6s,transform .6s}
+  .fade-left.visible{opacity:1;transform:translateX(0)}
+  .fade-right{opacity:0;transform:translateX(32px);transition:opacity .6s,transform .6s}
+  .fade-right.visible{opacity:1;transform:translateX(0)}
+  .stagger-child{opacity:0;transform:translateY(24px);transition:opacity .5s,transform .5s}
+  .stagger-child.visible{opacity:1;transform:translateY(0)}
+
+  /* TERMINAL EFFECT */
+  .terminal-line{font-family:var(--mono);font-size:.85rem;color:var(--green);opacity:.6;letter-spacing:.05em}
+  .terminal-cursor{display:inline-block;width:8px;height:1em;background:var(--green);margin-left:2px;animation:blink 1s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+  /* SECTION DIVIDER */
+  .divider{width:48px;height:2px;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:1px;margin:16px 0 24px}
+
+  /* MOBILE */
+  @media(max-width:900px){
+    .instructor-grid,.contact-grid{grid-template-columns:1fr}
+    .avatar-frame{width:200px;height:200px;font-size:3.5rem}
+    .nav-links{display:none}
+    .mobile-menu-btn{display:flex}
+    .hero-stats{gap:24px}
+  }
+  @media(max-width:600px){
+    .stats-grid{grid-template-columns:1fr 1fr}
+    .learn-grid{grid-template-columns:1fr 1fr}
+    .pricing-card{padding:32px 24px}
+  }
+
+  /* PAGE LOAD ANIMATION */
+  body.loading *{animation-play-state:paused}
+  .page-loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .5s,visibility .5s}
+  .page-loader.hidden{opacity:0;visibility:hidden}
+  .loader-logo{font-family:var(--mono);font-size:1.5rem;color:var(--green)}
+  .loader-bar{width:200px;height:2px;background:var(--bg3);border-radius:1px;overflow:hidden}
+  .loader-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:1px;animation:load 1.2s ease-out forwards}
+  @keyframes load{from{width:0}to{width:100%}}
+
+  /* MOBILE NAV OVERLAY */
+  .mobile-nav{display:none;position:fixed;inset:0;background:var(--bg);z-index:99;flex-direction:column;align-items:center;justify-content:center;gap:24px}
+  .mobile-nav.open{display:flex}
+  .mobile-nav a{font-size:1.3rem;font-weight:600;color:var(--text2);transition:color .2s}
+  .mobile-nav a:hover{color:var(--green)}
+  .mobile-close{position:absolute;top:20px;right:24px;background:transparent;border:none;color:var(--text2);font-size:1.5rem;cursor:pointer}
+</style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div class="page-loader" id="loader">
+  <div class="loader-logo">CYBER<span style="color:var(--cyan)">ACADEMY</span></div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div class="terminal-line">Initializing secure connection<span class="terminal-cursor"></span></div>
+</div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" onclick="closeMobileNav()">✕</button>
+  <a href="#instructor" onclick="closeMobileNav()" data-i18n="nav.instructor">Instructor</a>
+  <a href="#learn" onclick="closeMobileNav()" data-i18n="nav.learn">O'rganish</a>
+  <a href="#pricing" onclick="closeMobileNav()" data-i18n="nav.pricing">Narx</a>
+  <a href="#contact" onclick="closeMobileNav()" data-i18n="nav.contact">Aloqa</a>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-logo">
+    <span style="color:var(--green)">&#9632;</span>
+    CYBER<span>ACADEMY</span>
+  </div>
+  <div class="nav-links">
+    <a href="#instructor" data-i18n="nav.instructor">Instructor</a>
+    <a href="#attack" data-i18n="nav.attack">Hujum</a>
+    <a href="#learn" data-i18n="nav.learn">O'rganish</a>
+    <a href="#pricing" data-i18n="nav.pricing">Narx</a>
+    <a href="#contact" data-i18n="nav.contact">Aloqa</a>
+  </div>
+  <div class="nav-right">
+    <button class="lang-btn active" onclick="setLang('uz')">UZ</button>
+    <button class="lang-btn" onclick="setLang('ru')">RU</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    <button class="cta-nav" onclick="scrollTo('#contact')" data-i18n="nav.cta">Ro'yxatdan o'tish</button>
+    <button class="mobile-menu-btn" onclick="openMobileNav()">☰</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="grid-bg"></div>
+  <div class="noise"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="hero-inner">
+    <div class="hero-badge" data-i18n="hero.badge">🛡 Professional Cybersecurity Course</div>
+    <h1 class="hero-title">
+      <span data-i18n="hero.title1">Kiber xavfsizlikka</span><br>
+      <span class="line2" data-i18n="hero.title2">professional kirish</span>
+    </h1>
+    <p class="hero-sub" data-i18n="hero.subtitle">Penetration testing, bug bounty va offensive security sohasida real ko'nikmalar egallang. Amaliy loyihalar bilan karyerangizni boshlang.</p>
+    <div class="hero-cta-group">
+      <button class="btn-primary" onclick="scrollTo('#contact')">
+        <span data-i18n="hero.cta1">Ro'yxatdan o'tish</span> →
+      </button>
+      <button class="btn-secondary" onclick="scrollTo('#learn')">
+        <span data-i18n="hero.cta2">Ko'proq bilish</span>
+      </button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-count="4">0</div>
+        <div class="hero-stat-label" data-i18n="hero.stat1">+ Yil tajriba</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-count="50">0</div>
+        <div class="hero-stat-label" data-i18n="hero.stat2">+ Loyihalar</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">TOP</div>
+        <div class="hero-stat-label" data-i18n="hero.stat3">HTB O'zbekiston</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-count="100">0</div>
+        <div class="hero-stat-label" data-i18n="hero.stat4">+ Talabalar</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTRUCTOR -->
+<section id="instructor">
+  <div class="container">
+    <div class="instructor-grid">
+      <div class="fade-left">
+        <div class="instructor-avatar">
+          <div class="avatar-frame">
+            <div class="avatar-glow"></div>
+            <span style="font-size:5rem;user-select:none">👤</span>
+          </div>
+          <div class="instructor-roles" style="margin-top:24px">
+            <span class="role-tag">Pentester</span>
+            <span class="role-tag">Bug Hunter</span>
+            <span class="role-tag">Offensive Security</span>
+            <span class="role-tag">HTB Pro</span>
+          </div>
+        </div>
+      </div>
+      <div class="fade-right">
+        <div class="section-label" data-i18n="instructor.label">Instructor</div>
+        <div class="divider"></div>
+        <h2 class="instructor-name">Tulkin Urinbayev</h2>
+        <p class="instructor-bio" data-i18n="instructor.bio">Penetration testing va offensive security sohasidagi mutaxassis. HackTheBox platformasida O'zbekiston bo'yicha yetakchi o'rinlardan birida turadi. 50+ real loyihada ishtirok etgan, bug bounty bo'yicha keng tajribaga ega professional.</p>
+        <div class="stats-grid">
+          <div class="stat-card stagger-child">
+            <div class="stat-num">4+</div>
+            <div class="stat-label" data-i18n="instructor.stat1">Yil tajriba</div>
+          </div>
+          <div class="stat-card stagger-child">
+            <div class="stat-num">50+</div>
+            <div class="stat-label" data-i18n="instructor.stat2">Loyihalar</div>
+          </div>
+          <div class="stat-card stagger-child">
+            <div class="stat-num">#1</div>
+            <div class="stat-label" data-i18n="instructor.stat3">HTB UZ Rating</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ATTACK SCENARIO -->
+<section id="attack">
+  <div class="container">
+    <div class="fade-up" style="text-align:center;max-width:600px;margin:0 auto">
+      <div class="section-label" data-i18n="attack.label">Interactive Scenario</div>
+      <div class="divider" style="margin:16px auto"></div>
+      <h2 class="section-title" data-i18n="attack.title">Real hujum qanday sodir bo'ladi?</h2>
+      <p class="section-subtitle" style="margin:0 auto" data-i18n="attack.subtitle">Haqiqiy kiber hujum stsenariysi — bosqichma-bosqich</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-step">STEP 01</div>
+          <div class="timeline-title"><span class="timeline-icon">🔍</span> <span data-i18n="attack.step1.title">Razvedka (Reconnaissance)</span></div>
+          <div class="timeline-desc" data-i18n="attack.step1.desc">Hacker nishon kompaniya haqida ma'lumot yig'adi: domenlar, email manzillar, xodimlar, texnologiyalar. OSINT va passiv usullar qo'llaniladi.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="border-color:var(--cyan)"></div>
+        <div class="timeline-card">
+          <div class="timeline-step">STEP 02</div>
+          <div class="timeline-title"><span class="timeline-icon">📧</span> <span data-i18n="attack.step2.title">Phishing Email</span></div>
+          <div class="timeline-desc" data-i18n="attack.step2.desc">Ishonchli manbadan kelgandek ko'rinadigan email jo'natiladi. Ichida zararli PDF fayl yoki havola mavjud bo'ladi.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="border-color:var(--purple)"></div>
+        <div class="timeline-card">
+          <div class="timeline-step">STEP 03</div>
+          <div class="timeline-title"><span class="timeline-icon">📄</span> <span data-i18n="attack.step3.title">Foydalanuvchi faylni ochadi</span></div>
+          <div class="timeline-desc" data-i18n="attack.step3.desc">Qurbon PDF yoki hujjatni ochadi. Odatiy ko'rinishdagi fayl orqa fonda zararli kodni ishga tushiradi.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="border-color:#ff4444"></div>
+        <div class="timeline-card">
+          <div class="timeline-step">STEP 04</div>
+          <div class="timeline-title"><span class="timeline-icon">💀</span> <span data-i18n="attack.step4.title">Malware bajarilishi</span></div>
+          <div class="timeline-desc" data-i18n="attack.step4.desc">Zararli dastur tizimga o'rnatiladi, backdoor yaratiladi, hujumchi tizimni nazorat qila boshlaydi. Antivirus ko'pincha bu bosqichda aniqlay olmaydi.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="border-color:#ff8800"></div>
+        <div class="timeline-card">
+          <div class="timeline-step">STEP 05</div>
+          <div class="timeline-title"><span class="timeline-icon">📤</span> <span data-i18n="attack.step5.title">Ma'lumotlar o'g'irlanishi</span></div>
+          <div class="timeline-desc" data-i18n="attack.step5.desc">Maxfiy ma'lumotlar, parollar, moliyaviy hujjatlar hujumchi serveriga yuboriladi. Ko'pincha bu haftalab yashirin qoladi.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU LEARN -->
+<section id="learn">
+  <div class="container">
+    <div class="fade-up" style="text-align:center;max-width:600px;margin:0 auto">
+      <div class="section-label" data-i18n="learn.label">Curriculum</div>
+      <div class="divider" style="margin:16px auto"></div>
+      <h2 class="section-title" data-i18n="learn.title">Nima o'rganasiz?</h2>
+      <p class="section-subtitle" style="margin:0 auto" data-i18n="learn.subtitle">Industry-standard ko'nikmalar va real dunyoda ishlatiladigan texnikalar</p>
+    </div>
+    <div class="learn-grid">
+      <div class="learn-card stagger-child">
+        <div class="learn-icon">🎯</div>
+        <div class="learn-name">Reconnaissance</div>
+        <div class="learn-desc" data-i18n="learn.item1">OSINT, subdomain enumeration, passive/active recon texniikalari</div>
+      </div>
+      <div class="learn-card stagger-child">
+        <div class="learn-icon">💉</div>
+        <div class="learn-name">SQL Injection</div>
+        <div class="learn-desc" data-i18n="learn.item2">In-band, blind, time-based SQLi. SQLMap va manual exploitation</div>
+      </div>
+      <div class="learn-card stagger-child">
+        <div class="learn-icon">⚡</div>
+        <div class="learn-name">XSS</div>
+        <div class="learn-desc" data-i18n="learn.item3">Reflected, stored, DOM-based XSS. Bypass va real impact</div>
+      </div>
+      <div class="learn-card stagger-child">
+        <div class="learn-icon">🔄</div>
+        <div class="learn-name">SSRF</div>
+        <div class="learn-desc" data-i18n="learn.item4">Server-Side Request Forgery. Cloud metadata, internal services</div>
+      </div>
+      <div class="learn-card stagger-child">
+        <div class="learn-icon">📄</div>
+        <div class="learn-name">XXE</div>
+        <div class="learn-desc" data-i18n="learn.item5">XML External Entity injection. File read, SSRF via XXE</div>
+      </div>
+      <div class="learn-card stagger-child">
+        <div class="learn-icon">🔌</div>
+        <div class="learn-name">API Testing</div>
+        <div class="learn-desc" data-i18n="learn.item6">REST/GraphQL API security testing. Auth bypass, IDOR</div>
+      </div>
+      <div class="learn-card stagger-child">
+        <div class="learn-icon">🏆</div>
+        <div class="learn-name">Bug Hunting</div>
+        <div class="learn-desc" data-i18n="learn.item7">Bug bounty platforms: HackerOne, Bugcrowd. Report yozish</div>
+      </div>
+      <div class="learn-card stagger-child">
+        <div class="learn-icon">🔑</div>
+        <div class="learn-name">Auth Vulnerabilities</div>
+        <div class="learn-desc" data-i18n="learn.item8">JWT attacks, OAuth misconfigurations, session management</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REQUIREMENTS -->
+<section id="requirements">
+  <div class="container">
+    <div class="fade-up" style="max-width:600px">
+      <div class="section-label" data-i18n="req.label">Talablar</div>
+      <div class="divider"></div>
+      <h2 class="section-title" data-i18n="req.title">Kursga qabul talablari</h2>
+      <p class="section-subtitle" data-i18n="req.subtitle">Muvaffaqiyatli o'quvchi bo'lish uchun quyidagilarga tayyor bo'ling</p>
+    </div>
+    <div class="req-grid" style="margin-top:48px">
+      <div class="req-item stagger-child">
+        <div class="req-check">✓</div>
+        <div>
+          <div class="req-title" data-i18n="req.item1.title">Vazifaga sadoqat</div>
+          <div class="req-text" data-i18n="req.item1.desc">Har bir topshiriqni o'z vaqtida bajarib borish. Kechikishlar va sababsiz o'tkazib yuborishlar yo'q.</div>
+        </div>
+      </div>
+      <div class="req-item stagger-child">
+        <div class="req-check">✓</div>
+        <div>
+          <div class="req-title" data-i18n="req.item2.title">Mustaqil o'rganish</div>
+          <div class="req-text" data-i18n="req.item2.desc">Dokumentatsiyalarni o'qish, Google qilish, o'z-o'zini rivojlantirish istagingiz bo'lishi kerak.</div>
+        </div>
+      </div>
+      <div class="req-item stagger-child">
+        <div class="req-check">✓</div>
+        <div>
+          <div class="req-title" data-i18n="req.item3.title">Laboratoriya mashqlari</div>
+          <div class="req-text" data-i18n="req.item3.desc">HTB, TryHackMe va maxsus laboratoriyalarda haftasiga kamida 10 soat amaliyot.</div>
+        </div>
+      </div>
+      <div class="req-item stagger-child">
+        <div class="req-check">✓</div>
+        <div>
+          <div class="req-title" data-i18n="req.item4.title">Hurmat va etika</div>
+          <div class="req-text" data-i18n="req.item4.desc">Guruh a'zolari va instructorga hurmat. Professional munosabat, hech qanday toxotbozlik yo'q.</div>
+        </div>
+      </div>
+      <div class="req-item stagger-child">
+        <div class="req-check">✓</div>
+        <div>
+          <div class="req-title" data-i18n="req.item5.title">Qonuniy doirada ishlash</div>
+          <div class="req-text" data-i18n="req.item5.desc">O'rganilgan texnikalarni faqat ruxsat berilgan muhitlarda qo'llash. Kiberqonunchilikni bilish va hurmat qilish.</div>
+        </div>
+      </div>
+      <div class="req-item stagger-child">
+        <div class="req-check">✓</div>
+        <div>
+          <div class="req-title" data-i18n="req.item6.title">Asosiy kompyuter bilimlari</div>
+          <div class="req-text" data-i18n="req.item6.desc">Linux asoslari, tarmoq fundamentallari va dasturlash uchun elementar tushuncha tavsiya etiladi.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAREERS -->
+<section id="careers">
+  <div class="container">
+    <div class="fade-up" style="text-align:center;max-width:600px;margin:0 auto">
+      <div class="section-label" data-i18n="careers.label">Karyera</div>
+      <div class="divider" style="margin:16px auto"></div>
+      <h2 class="section-title" data-i18n="careers.title">Kurs tugagandan keyin</h2>
+      <p class="section-subtitle" style="margin:0 auto" data-i18n="careers.subtitle">Kursni muvaffaqiyatli tugatgan o'quvchilar uchun ochiq yo'llar</p>
+    </div>
+    <div class="career-grid">
+      <div class="career-card stagger-child">
+        <div class="career-icon">⚔️</div>
+        <div class="career-title" data-i18n="careers.role1.title">Penetration Tester</div>
+        <div class="career-desc" data-i18n="careers.role1.desc">Kompaniyalar tizimlarini hujumlardan oldin sinab ko'rish. Zaifliklarni topish va hisobot tayyorlash.</div>
+        <div class="career-salary">$2,000 – $6,000/oy</div>
+      </div>
+      <div class="career-card stagger-child">
+        <div class="career-icon">🎯</div>
+        <div class="career-title" data-i18n="careers.role2.title">Bug Hunter</div>
+        <div class="career-desc" data-i18n="careers.role2.desc">HackerOne, Bugcrowd platformalarida zaifliklar topib, mukofot pullar ishlash.</div>
+        <div class="career-salary">$500 – $50,000+ (bounty)</div>
+      </div>
+      <div class="career-card stagger-child">
+        <div class="career-icon">🛡️</div>
+        <div class="career-title" data-i18n="careers.role3.title">Cybersecurity Analyst</div>
+        <div class="career-desc" data-i18n="careers.role3.desc">Tashkilot infratuzilmasini monitoring qilish, hujumlarni aniqlash va bartaraf etish.</div>
+        <div class="career-salary">$1,500 – $4,000/oy</div>
+      </div>
+      <div class="career-card stagger-child">
+        <div class="career-icon">🔓</div>
+        <div class="career-title" data-i18n="careers.role4.title">Offensive Security Engineer</div>
+        <div class="career-desc" data-i18n="careers.role4.desc">Red team operatsiyalari. Advanced persistent threat simulyatsiyasi. Senior daraja.</div>
+        <div class="career-salary">$4,000 – $12,000/oy</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="fade-up" style="text-align:center;max-width:600px;margin:0 auto">
+      <div class="section-label" data-i18n="pricing.label">Narx</div>
+      <div class="divider" style="margin:16px auto"></div>
+      <h2 class="section-title" data-i18n="pricing.title">Investitsiyangiz</h2>
+      <p class="section-subtitle" style="margin:0 auto" data-i18n="pricing.subtitle">Bir martalik to'lov yoki qulay muddatli to'lov</p>
+    </div>
+    <div class="pricing-wrapper fade-up">
+      <div class="pricing-card">
+        <div class="pricing-badge">⭐ <span data-i18n="pricing.badge">Bo'lib to'lash mavjud</span></div>
+        <div class="pricing-price">6,000,000 <span>UZS</span></div>
+        <div style="font-size:.85rem;color:var(--text3);margin-bottom:8px" data-i18n="pricing.total">To'liq kurs narxi</div>
+        <div class="pricing-installment">
+          💳 <div><span data-i18n="pricing.installment1">12 oyga bo'lib to'lash:</span> <strong>500,000 UZS/oy</strong></div>
+        </div>
+        <ul class="pricing-features">
+          <li data-i18n="pricing.f1">80+ soat video darslar</li>
+          <li data-i18n="pricing.f2">Real amaliy laboratoriyalar</li>
+          <li data-i18n="pricing.f3">Shaxsiy mentor sessiyalari</li>
+          <li data-i18n="pricing.f4">Telegram maxsus guruh</li>
+          <li data-i18n="pricing.f5">Kurs sertifikati</li>
+          <li data-i18n="pricing.f6">Karyera yo'naltirish yordam</li>
+          <li data-i18n="pricing.f7">Umrbod materiallarga kirish</li>
+        </ul>
+        <button class="btn-cta-large" onclick="scrollTo('#contact')">
+          <span data-i18n="pricing.cta">Hoziroq ro'yxatdan o'ting</span> →
+        </button>
+        <p style="text-align:center;font-size:.8rem;color:var(--text3);margin-top:16px" data-i18n="pricing.note">Joylar cheklangan. Guruh hajmi: 20 nafar</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="fade-up" style="max-width:600px">
+      <div class="section-label" data-i18n="contact.label">Aloqa</div>
+      <div class="divider"></div>
+      <h2 class="section-title" data-i18n="contact.title">Bog'laning</h2>
+      <p class="section-subtitle" data-i18n="contact.subtitle">Savollaringiz bormi? Biz bilan bog'laning yoki hoziroq ro'yxatdan o'ting</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <a href="tel:+998555194004" class="contact-item stagger-child">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-label" data-i18n="contact.phone.label">Telefon</div>
+            <div class="contact-value">+998 55 519 40 04</div>
+          </div>
+        </a>
+        <a href="https://t.me/cyberacademy_uz" class="contact-item stagger-child">
+          <div class="contact-icon">✈️</div>
+          <div>
+            <div class="contact-label">Telegram</div>
+            <div class="contact-value">@cyberacademy_uz</div>
+          </div>
+        </a>
+        <a href="https://instagram.com/cyberacademy_uz" class="contact-item stagger-child">
+          <div class="contact-icon">📸</div>
+          <div>
+            <div class="contact-label">Instagram</div>
+            <div class="contact-value">@cyberacademy_uz</div>
+          </div>
+        </a>
+        <div class="contact-item stagger-child" style="background:rgba(0,255,136,0.05);border-color:var(--green)">
+          <div class="contact-icon">🕐</div>
+          <div>
+            <div class="contact-label" data-i18n="contact.hours.label">Ish vaqti</div>
+            <div class="contact-value" data-i18n="contact.hours.value">Du–Sha: 9:00 – 20:00</div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form fade-right">
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:24px" data-i18n="contact.form.title">Ro'yxatdan o'tish</h3>
+        <div class="form-group">
+          <label class="form-label" data-i18n="contact.form.name">Ism Familiya</label>
+          <input class="form-input" type="text" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="contact.form.phone">Telefon raqam</label>
+          <input class="form-input" type="tel" placeholder="+998 90 123 45 67">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Telegram</label>
+          <input class="form-input" type="text" placeholder="@username">
+        </div>
+        <button class="btn-cta-large" onclick="handleSubmit()" style="font-size:1rem">
+          <span data-i18n="contact.form.submit">Ariza yuborish</span> →
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">CYBER<span style="color:var(--cyan)">ACADEMY</span></div>
+    <p class="footer-text" style="margin-bottom:8px" data-i18n="footer.tagline">Professional Cybersecurity ta'limi</p>
+    <p class="footer-text">© 2025 CyberAcademy Uzbekistan. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+// ── TRANSLATIONS ──
+const T = {
+  uz: {
+    "nav.instructor":"Instructor","nav.attack":"Hujum","nav.learn":"O'rganish","nav.pricing":"Narx","nav.contact":"Aloqa","nav.cta":"Ro'yxatdan o'tish",
+    "hero.badge":"🛡 Professional Cybersecurity Kursi","hero.title1":"Kiber xavfsizlikka","hero.title2":"professional kirish","hero.subtitle":"Penetration testing, bug bounty va offensive security sohasida real ko'nikmalar egallang. Amaliy loyihalar bilan karyerangizni boshlang.","hero.cta1":"Ro'yxatdan o'tish","hero.cta2":"Ko'proq bilish","hero.stat1":"+ Yil tajriba","hero.stat2":"+ Loyihalar","hero.stat3":"HTB O'zbekiston","hero.stat4":"+ Talabalar",
+    "instructor.label":"Instructor","instructor.bio":"Penetration testing va offensive security sohasidagi mutaxassis. HackTheBox platformasida O'zbekiston bo'yicha yetakchi o'rinlardan birida turadi. 50+ real loyihada ishtirok etgan, bug bounty bo'yicha keng tajribaga ega professional.","instructor.stat1":"Yil tajriba","instructor.stat2":"Loyihalar","instructor.stat3":"HTB UZ Rating",
+    "attack.label":"Interaktiv Stsenariy","attack.title":"Real hujum qanday sodir bo'ladi?","attack.subtitle":"Haqiqiy kiber hujum stsenariysi — bosqichma-bosqich","attack.step1.title":"Razvedka (Reconnaissance)","attack.step1.desc":"Hacker nishon kompaniya haqida ma'lumot yig'adi: domenlar, email manzillar, xodimlar, texnologiyalar. OSINT va passiv usullar qo'llaniladi.","attack.step2.title":"Phishing Email","attack.step2.desc":"Ishonchli manbadan kelgandek ko'rinadigan email jo'natiladi. Ichida zararli PDF fayl yoki havola mavjud bo'ladi.","attack.step3.title":"Foydalanuvchi faylni ochadi","attack.step3.desc":"Qurbon PDF yoki hujjatni ochadi. Odatiy ko'rinishdagi fayl orqa fonda zararli kodni ishga tushiradi.","attack.step4.title":"Malware bajarilishi","attack.step4.desc":"Zararli dastur tizimga o'rnatiladi, backdoor yaratiladi, hujumchi tizimni nazorat qila boshlaydi.","attack.step5.title":"Ma'lumotlar o'g'irlanishi","attack.step5.desc":"Maxfiy ma'lumotlar, parollar, moliyaviy hujjatlar hujumchi serveriga yuboriladi.",
+    "learn.label":"Curriculum","learn.title":"Nima o'rganasiz?","learn.subtitle":"Industry-standard ko'nikmalar va real dunyoda ishlatiladigan texnikalar","learn.item1":"OSINT, subdomain enumeration, passive/active recon texniikalari","learn.item2":"In-band, blind, time-based SQLi. SQLMap va manual exploitation","learn.item3":"Reflected, stored, DOM-based XSS. Bypass va real impact","learn.item4":"Server-Side Request Forgery. Cloud metadata, internal services","learn.item5":"XML External Entity injection. File read, SSRF via XXE","learn.item6":"REST/GraphQL API security testing. Auth bypass, IDOR","learn.item7":"Bug bounty platforms: HackerOne, Bugcrowd. Report yozish","learn.item8":"JWT attacks, OAuth misconfigurations, session management",
+    "req.label":"Talablar","req.title":"Kursga qabul talablari","req.subtitle":"Muvaffaqiyatli o'quvchi bo'lish uchun quyidagilarga tayyor bo'ling","req.item1.title":"Vazifaga sadoqat","req.item1.desc":"Har bir topshiriqni o'z vaqtida bajarib borish.","req.item2.title":"Mustaqil o'rganish","req.item2.desc":"Dokumentatsiyalarni o'qish, Google qilish, o'z-o'zini rivojlantirish.","req.item3.title":"Laboratoriya mashqlari","req.item3.desc":"HTB, TryHackMe va maxsus laboratoriyalarda haftasiga kamida 10 soat.","req.item4.title":"Hurmat va etika","req.item4.desc":"Guruh a'zolari va instructorga hurmat. Professional munosabat.","req.item5.title":"Qonuniy doirada ishlash","req.item5.desc":"O'rganilgan texnikalarni faqat ruxsat berilgan muhitlarda qo'llash.","req.item6.title":"Asosiy kompyuter bilimlari","req.item6.desc":"Linux asoslari, tarmoq fundamentallari elementar tushuncha tavsiya etiladi.",
+    "careers.label":"Karyera","careers.title":"Kurs tugagandan keyin","careers.subtitle":"Kursni muvaffaqiyatli tugatgan o'quvchilar uchun ochiq yo'llar","careers.role1.title":"Penetration Tester","careers.role1.desc":"Kompaniyalar tizimlarini hujumlardan oldin sinab ko'rish.","careers.role2.title":"Bug Hunter","careers.role2.desc":"HackerOne, Bugcrowd platformalarida zaifliklar topib mukofot olish.","careers.role3.title":"Cybersecurity Analyst","careers.role3.desc":"Tashkilot infratuzilmasini monitoring qilish, hujumlarni aniqlash.","careers.role4.title":"Offensive Security Engineer","careers.role4.desc":"Red team operatsiyalari. Advanced persistent threat simulyatsiyasi.",
+    "pricing.label":"Narx","pricing.title":"Investitsiyangiz","pricing.subtitle":"Bir martalik to'lov yoki qulay muddatli to'lov","pricing.badge":"Bo'lib to'lash mavjud","pricing.total":"To'liq kurs narxi","pricing.installment1":"12 oyga bo'lib to'lash:","pricing.f1":"80+ soat video darslar","pricing.f2":"Real amaliy laboratoriyalar","pricing.f3":"Shaxsiy mentor sessiyalari","pricing.f4":"Telegram maxsus guruh","pricing.f5":"Kurs sertifikati","pricing.f6":"Karyera yo'naltirish yordam","pricing.f7":"Umrbod materiallarga kirish","pricing.cta":"Hoziroq ro'yxatdan o'ting","pricing.note":"Joylar cheklangan. Guruh hajmi: 20 nafar",
+    "contact.label":"Aloqa","contact.title":"Bog'laning","contact.subtitle":"Savollaringiz bormi? Biz bilan bog'laning yoki hoziroq ro'yxatdan o'ting","contact.phone.label":"Telefon","contact.hours.label":"Ish vaqti","contact.hours.value":"Du–Sha: 9:00 – 20:00","contact.form.title":"Ro'yxatdan o'tish","contact.form.name":"Ism Familiya","contact.form.phone":"Telefon raqam","contact.form.submit":"Ariza yuborish",
+    "footer.tagline":"Professional Cybersecurity ta'limi"
+  },
+  ru: {
+    "nav.instructor":"Инструктор","nav.attack":"Атака","nav.learn":"Обучение","nav.pricing":"Цена","nav.contact":"Контакт","nav.cta":"Зарегистрироваться",
+    "hero.badge":"🛡 Профессиональный курс кибербезопасности","hero.title1":"Погружение в","hero.title2":"кибербезопасность","hero.subtitle":"Освойте реальные навыки в пентестинге, bug bounty и offensive security. Начните карьеру с практических проектов.","hero.cta1":"Зарегистрироваться","hero.cta2":"Узнать больше","hero.stat1":"+ Лет опыта","hero.stat2":"+ Проектов","hero.stat3":"HTB Узбекистан","hero.stat4":"+ Студентов",
+    "instructor.label":"Инструктор","instructor.bio":"Специалист в области пентестинга и offensive security. Занимает лидирующие позиции в Узбекистане на платформе HackTheBox. Участвовал в 50+ реальных проектах, имеет обширный опыт bug bounty.","instructor.stat1":"Лет опыта","instructor.stat2":"Проектов","instructor.stat3":"HTB UZ Рейтинг",
+    "attack.label":"Интерактивный сценарий","attack.title":"Как происходит реальная атака?","attack.subtitle":"Реальный сценарий кибератаки — шаг за шагом","attack.step1.title":"Разведка (Reconnaissance)","attack.step1.desc":"Хакер собирает информацию о целевой компании: домены, email адреса, сотрудники, технологии. Используются OSINT и пассивные методы.","attack.step2.title":"Фишинговый Email","attack.step2.desc":"Отправляется письмо, выглядящее как надёжный источник. Внутри — вредоносный PDF файл или ссылка.","attack.step3.title":"Пользователь открывает файл","attack.step3.desc":"Жертва открывает PDF или документ. Обычно выглядящий файл запускает вредоносный код в фоне.","attack.step4.title":"Выполнение вредоносного ПО","attack.step4.desc":"Вредоносная программа устанавливается в систему, создаётся backdoor, злоумышленник начинает контролировать систему.","attack.step5.title":"Кража данных","attack.step5.desc":"Конфиденциальные данные, пароли, финансовые документы отправляются на сервер злоумышленника.",
+    "learn.label":"Программа","learn.title":"Что вы изучите?","learn.subtitle":"Отраслевые стандарты и техники, применяемые в реальном мире","learn.item1":"OSINT, перечисление поддоменов, пассивный/активный recon","learn.item2":"In-band, blind, time-based SQLi. SQLMap и ручная эксплуатация","learn.item3":"Reflected, stored, DOM-based XSS. Bypass и реальный импакт","learn.item4":"Server-Side Request Forgery. Cloud metadata, внутренние сервисы","learn.item5":"XML External Entity injection. Чтение файлов, SSRF через XXE","learn.item6":"REST/GraphQL API security testing. Auth bypass, IDOR","learn.item7":"Bug bounty платформы: HackerOne, Bugcrowd. Написание отчётов","learn.item8":"JWT атаки, OAuth мисконфигурации, управление сессиями",
+    "req.label":"Требования","req.title":"Требования к поступлению","req.subtitle":"Будьте готовы к следующему для успешного обучения","req.item1.title":"Дисциплина","req.item1.desc":"Выполнение каждого задания в срок.","req.item2.title":"Самообучение","req.item2.desc":"Читать документацию, гуглить, саморазвиваться.","req.item3.title":"Лабораторные практики","req.item3.desc":"Минимум 10 часов в неделю на HTB, TryHackMe и спецлабах.","req.item4.title":"Уважение и этика","req.item4.desc":"Уважение к участникам группы и инструктору.","req.item5.title":"Работа в правовых рамках","req.item5.desc":"Применять техники только в разрешённых средах.","req.item6.title":"Базовые компьютерные знания","req.item6.desc":"Рекомендуется базовое понимание Linux, сетей и программирования.",
+    "careers.label":"Карьера","careers.title":"После окончания курса","careers.subtitle":"Открытые пути для успешно завершивших курс","careers.role1.title":"Пентестер","careers.role1.desc":"Тестирование систем компаний перед атаками хакеров.","careers.role2.title":"Bug Hunter","careers.role2.desc":"Поиск уязвимостей на HackerOne, Bugcrowd с вознаграждением.","careers.role3.title":"Аналитик кибербезопасности","careers.role3.desc":"Мониторинг инфраструктуры организации, обнаружение атак.","careers.role4.title":"Offensive Security Engineer","careers.role4.desc":"Операции red team. Симуляция APT-атак. Senior уровень.",
+    "pricing.label":"Цена","pricing.title":"Ваши инвестиции","pricing.subtitle":"Единовременная оплата или удобная рассрочка","pricing.badge":"Рассрочка доступна","pricing.total":"Полная стоимость курса","pricing.installment1":"Рассрочка на 12 месяцев:","pricing.f1":"80+ часов видеоуроков","pricing.f2":"Реальные практические лаборатории","pricing.f3":"Личные сессии с ментором","pricing.f4":"Специальная группа Telegram","pricing.f5":"Сертификат курса","pricing.f6":"Помощь в карьерном ориентировании","pricing.f7":"Пожизненный доступ к материалам","pricing.cta":"Зарегистрируйтесь прямо сейчас","pricing.note":"Места ограничены. Размер группы: 20 человек",
+    "contact.label":"Контакт","contact.title":"Связаться","contact.subtitle":"Есть вопросы? Свяжитесь с нами или зарегистрируйтесь прямо сейчас","contact.phone.label":"Телефон","contact.hours.label":"Время работы","contact.hours.value":"Пн–Сб: 9:00 – 20:00","contact.form.title":"Регистрация","contact.form.name":"Имя Фамилия","contact.form.phone":"Номер телефона","contact.form.submit":"Отправить заявку",
+    "footer.tagline":"Профессиональное образование по кибербезопасности"
+  },
+  en: {
+    "nav.instructor":"Instructor","nav.attack":"Attack","nav.learn":"Learn","nav.pricing":"Pricing","nav.contact":"Contact","nav.cta":"Enroll Now",
+    "hero.badge":"🛡 Professional Cybersecurity Course","hero.title1":"Enter the world of","hero.title2":"cybersecurity","hero.subtitle":"Master real skills in penetration testing, bug bounty, and offensive security. Launch your career with hands-on projects.","hero.cta1":"Enroll Now","hero.cta2":"Learn More","hero.stat1":"+ Years Experience","hero.stat2":"+ Projects","hero.stat3":"HTB Uzbekistan","hero.stat4":"+ Students",
+    "instructor.label":"Instructor","instructor.bio":"Expert in penetration testing and offensive security. Holds top rankings in Uzbekistan on HackTheBox. Has participated in 50+ real-world projects with extensive bug bounty experience.","instructor.stat1":"Years Experience","instructor.stat2":"Projects","instructor.stat3":"HTB UZ Rating",
+    "attack.label":"Interactive Scenario","attack.title":"How does a real attack happen?","attack.subtitle":"A real-world cyberattack scenario — step by step","attack.step1.title":"Reconnaissance","attack.step1.desc":"The hacker collects intel on the target company: domains, emails, employees, technologies. OSINT and passive methods are used.","attack.step2.title":"Phishing Email","attack.step2.desc":"An email is sent that appears to be from a trusted source. It contains a malicious PDF file or link.","attack.step3.title":"User opens the file","attack.step3.desc":"The victim opens the PDF or document. The seemingly normal file runs malicious code in the background.","attack.step4.title":"Malware execution","attack.step4.desc":"The malware installs itself, creates a backdoor, and the attacker begins controlling the system.","attack.step5.title":"Data exfiltration","attack.step5.desc":"Confidential data, passwords, and financial documents are sent to the attacker's server. This often remains hidden for weeks.",
+    "learn.label":"Curriculum","learn.title":"What will you learn?","learn.subtitle":"Industry-standard skills and techniques used in the real world","learn.item1":"OSINT, subdomain enumeration, passive/active recon techniques","learn.item2":"In-band, blind, time-based SQLi. SQLMap and manual exploitation","learn.item3":"Reflected, stored, DOM-based XSS. Bypass and real impact","learn.item4":"Server-Side Request Forgery. Cloud metadata, internal services","learn.item5":"XML External Entity injection. File read, SSRF via XXE","learn.item6":"REST/GraphQL API security testing. Auth bypass, IDOR","learn.item7":"Bug bounty platforms: HackerOne, Bugcrowd. Writing reports","learn.item8":"JWT attacks, OAuth misconfigurations, session management",
+    "req.label":"Requirements","req.title":"Enrollment Requirements","req.subtitle":"Be prepared for the following to become a successful student","req.item1.title":"Task Discipline","req.item1.desc":"Complete every assignment on time. No delays or missed work.","req.item2.title":"Self-Study Mindset","req.item2.desc":"Reading documentation, Googling, self-development drive.","req.item3.title":"Lab Practice","req.item3.desc":"At least 10 hours per week on HTB, TryHackMe and special labs.","req.item4.title":"Respect & Ethics","req.item4.desc":"Respect for group members and instructor. Professional conduct.","req.item5.title":"Legal Awareness","req.item5.desc":"Apply learned techniques only in authorized environments. Know cyber law.","req.item6.title":"Basic Computer Knowledge","req.item6.desc":"Basic understanding of Linux, networking and programming recommended.",
+    "careers.label":"Careers","careers.title":"After the Course","careers.subtitle":"Paths open to those who successfully complete the course","careers.role1.title":"Penetration Tester","careers.role1.desc":"Testing company systems before real attackers do. Finding vulnerabilities and writing reports.","careers.role2.title":"Bug Hunter","careers.role2.desc":"Finding vulnerabilities on HackerOne, Bugcrowd platforms for bounty rewards.","careers.role3.title":"Cybersecurity Analyst","careers.role3.desc":"Monitoring organizational infrastructure, detecting and responding to attacks.","careers.role4.title":"Offensive Security Engineer","careers.role4.desc":"Red team operations. Advanced persistent threat simulation. Senior-level role.",
+    "pricing.label":"Pricing","pricing.title":"Your Investment","pricing.subtitle":"One-time payment or convenient installment plan","pricing.badge":"Installment Available","pricing.total":"Full course price","pricing.installment1":"12-month installment plan:","pricing.f1":"80+ hours of video lessons","pricing.f2":"Real hands-on laboratories","pricing.f3":"Personal mentor sessions","pricing.f4":"Exclusive Telegram group","pricing.f5":"Course certificate","pricing.f6":"Career guidance support","pricing.f7":"Lifetime access to materials","pricing.cta":"Enroll Right Now","pricing.note":"Limited spots. Group size: 20 students",
+    "contact.label":"Contact","contact.title":"Get in Touch","contact.subtitle":"Have questions? Contact us or enroll right now","contact.phone.label":"Phone","contact.hours.label":"Working Hours","contact.hours.value":"Mon–Sat: 9:00 AM – 8:00 PM","contact.form.title":"Registration","contact.form.name":"Full Name","contact.form.phone":"Phone Number","contact.form.submit":"Submit Application",
+    "footer.tagline":"Professional Cybersecurity Education"
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || 'uz';
+let currentTheme = localStorage.getItem('theme') || 'dark';
+
+// Apply saved theme
+document.documentElement.setAttribute('data-theme', currentTheme);
+document.getElementById('themeBtn').textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+
+function applyTranslations(lang) {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (T[lang] && T[lang][key]) el.textContent = T[lang][key];
+  });
+  // Update input placeholders
+  const inputs = document.querySelectorAll('.form-input');
+  if (inputs[0]) inputs[0].placeholder = lang === 'uz' ? 'Ism Familiya' : lang === 'ru' ? 'Имя Фамилия' : 'Full Name';
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  applyTranslations(lang);
+  document.documentElement.lang = lang;
+}
+
+function toggleTheme() {
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  document.getElementById('themeBtn').textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+  localStorage.setItem('theme', currentTheme);
+}
+
+function scrollTo(selector) {
+  document.querySelector(selector).scrollIntoView({behavior:'smooth'});
+}
+
+function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
+function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+
+function handleSubmit() {
+  const inputs = document.querySelectorAll('.form-input');
+  const name = inputs[0].value.trim();
+  const phone = inputs[1].value.trim();
+  if (!name || !phone) {
+    alert(currentLang === 'uz' ? 'Iltimos, barcha maydonlarni to\'ldiring' : currentLang === 'ru' ? 'Пожалуйста, заполните все поля' : 'Please fill in all fields');
+    return;
+  }
+  const btn = document.querySelector('#contact .btn-cta-large');
+  btn.textContent = currentLang === 'uz' ? '✓ Ariza yuborildi!' : currentLang === 'ru' ? '✓ Заявка отправлена!' : '✓ Application sent!';
+  btn.style.background = 'var(--cyan)';
+  setTimeout(() => {
+    btn.innerHTML = '<span data-i18n="contact.form.submit">' + (T[currentLang]['contact.form.submit'] || 'Submit') + '</span> →';
+    btn.style.background = 'var(--green)';
+  }, 3000);
+}
+
+// Counter animation
+function animateCounters() {
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseInt(el.getAttribute('data-count'));
+    let current = 0;
+    const step = target / 40;
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = Math.round(current);
+      if (current >= target) { el.textContent = target + '+'; clearInterval(timer); }
+    }, 30);
+  });
+}
+
+// Scroll observer
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, {threshold: 0.1, rootMargin: '0px 0px -50px 0px'});
+
+// Stagger observer
+const staggerObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const siblings = entry.target.parentElement.querySelectorAll('.stagger-child');
+      siblings.forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), i * 100);
+      });
+      staggerObserver.unobserve(entry.target);
+    }
+  });
+}, {threshold: 0.1});
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  // Loader
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+    animateCounters();
+  }, 1400);
+
+  // Apply initial lang
+  const savedLang = localStorage.getItem('lang') || 'uz';
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.remove('active');
+    if (b.textContent.toLowerCase() === savedLang) b.classList.add('active');
+  });
+  applyTranslations(savedLang);
+
+  // Observe elements
+  document.querySelectorAll('.fade-up,.fade-left,.fade-right,.timeline-item').forEach(el => observer.observe(el));
+  document.querySelectorAll('.stagger-child').forEach((el, i) => {
+    if (i === 0 || el.parentElement !== document.querySelectorAll('.stagger-child')[i-1]?.parentElement) {
+      staggerObserver.observe(el);
+    }
+  });
+
+  // Navbar scroll effect
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 20) { nav.style.boxShadow = '0 4px 32px rgba(0,0,0,0.4)'; }
+    else { nav.style.boxShadow = 'none'; }
+  });
+});
+</script>
+</body>
+</html>
